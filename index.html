@@ -158,7 +158,7 @@
     <!-- Preview -->
     <section class="bg-[#161b22] border border-[#30363d] rounded-md p-6 space-y-4">
       <h2 class="text-xs font-semibold text-[#8b949e] uppercase tracking-wider">Preview</h2>
-      <div id="preview-container" class="min-h-[120px] flex items-center justify-center border border-dashed border-[#30363d] rounded-md p-4 bg-[#0d1117] transition-colors duration-200"></div>
+      <div id="preview-container" class="min-h-[120px] flex items-center justify-center border border-dashed border-[#30363d] rounded-md p-4 bg-[#0d1117] transition-all duration-200"></div>
     </section>
 
     <!-- Look at how it works -->
@@ -180,7 +180,7 @@
         </select>
       </div>
 
-      <div id="demo-container" class="min-h-[120px] flex items-center justify-center border border-dashed border-[#30363d] rounded-md p-4 bg-[#0d1117] transition-colors duration-200"></div>
+      <div id="demo-container" class="min-h-[120px] flex items-center justify-center border border-dashed border-[#30363d] rounded-md p-4 bg-[#0d1117] transition-all duration-200"></div>
     </section>
 
   </div>
@@ -201,7 +201,9 @@
     const demoContainer = document.getElementById("demo-container");
 
     function isLightTheme(theme) {
-      return theme.includes("light") || theme.includes("latte") || theme === "noborder_light";
+      if (!theme) return false;
+      const lower = theme.toLowerCase();
+      return lower.includes("light") || lower.includes("latte") || lower === "noborder_light" || lower === "gruvbox_light";
     }
 
     function getSelectedTheme() {
@@ -222,33 +224,48 @@
 
     function updateContainerTheme(container, theme) {
       if (isLightTheme(theme)) {
-        container.classList.remove("bg-[#0d1117]");
-        container.classList.add("bg-[#f6f8fa]");
+        container.classList.remove("bg-[#0d1117]", "border-[#30363d]");
+        container.classList.add("bg-[#ebedef]", "border-[#d0d7de]");
       } else {
-        container.classList.remove("bg-[#f6f8fa]");
-        container.classList.add("bg-[#0d1117]");
+        container.classList.remove("bg-[#ebedef]", "border-[#d0d7de]");
+        container.classList.add("bg-[#0d1117]", "border-[#30363d]");
       }
     }
 
     function postThemeToIframe(container, theme, lang) {
       const iframe = container.querySelector("iframe");
-      if (iframe && iframe.contentWindow) {
-        const message = {
-          giscus: {
-            setConfig: {
-              theme: theme,
-              lang: lang
-            }
+      if (!iframe) return;
+
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: theme,
+            lang: lang
           }
-        };
-        iframe.contentWindow.postMessage(message, "*");
-      }
+        }
+      };
+
+      const send = () => {
+        try {
+          if (iframe.contentWindow) {
+            iframe.contentWindow.postMessage(message, "*");
+          }
+        } catch (err) {}
+      };
+
+      send();
+      iframe.addEventListener("load", send);
+
+      // Repeatedly postMessage to catch delayed iframe script initialization inside GitContrib
+      [50, 150, 300, 600, 1000, 1800].forEach(delay => {
+        setTimeout(send, delay);
+      });
     }
 
     function renderWidget(container, repo, theme, lang) {
       updateContainerTheme(container, theme);
       container.innerHTML = "";
-      
+
       const scriptTag = document.createElement("script");
       scriptTag.src = `${SCRIPT_URL}?v=${Date.now()}`;
       scriptTag.setAttribute("data-repo", repo);
@@ -256,11 +273,18 @@
       scriptTag.setAttribute("data-lang", lang);
       scriptTag.async = true;
 
-      container.appendChild(scriptTag);
+      // Observe iframe insertion in real-time
+      const observer = new MutationObserver(() => {
+        const iframe = container.querySelector("iframe");
+        if (iframe) {
+          postThemeToIframe(container, theme, lang);
+          observer.disconnect();
+        }
+      });
+      observer.observe(container, { childList: true, subtree: true });
 
-      setTimeout(() => {
-        postThemeToIframe(container, theme, lang);
-      }, 300);
+      container.appendChild(scriptTag);
+      postThemeToIframe(container, theme, lang);
     }
 
     function updateGenerator() {
