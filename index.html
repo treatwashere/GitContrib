@@ -158,7 +158,7 @@
     <!-- Preview -->
     <section class="bg-[#161b22] border border-[#30363d] rounded-md p-6 space-y-4">
       <h2 class="text-xs font-semibold text-[#8b949e] uppercase tracking-wider">Preview</h2>
-      <div id="preview-container" class="min-h-[120px] flex items-center justify-center border border-dashed border-[#30363d] rounded-md p-4 bg-[#0d1117]"></div>
+      <div id="preview-container" class="min-h-[120px] flex items-center justify-center border border-dashed border-[#30363d] rounded-md p-4 bg-[#0d1117] transition-colors duration-200"></div>
     </section>
 
     <!-- Look at how it works -->
@@ -180,7 +180,7 @@
         </select>
       </div>
 
-      <div id="demo-container" class="min-h-[120px] flex items-center justify-center border border-dashed border-[#30363d] rounded-md p-4 bg-[#0d1117]"></div>
+      <div id="demo-container" class="min-h-[120px] flex items-center justify-center border border-dashed border-[#30363d] rounded-md p-4 bg-[#0d1117] transition-colors duration-200"></div>
     </section>
 
   </div>
@@ -200,6 +200,10 @@
     const demoRepoSelect = document.getElementById("select-demo-repo");
     const demoContainer = document.getElementById("demo-container");
 
+    function isLightTheme(theme) {
+      return theme.includes("light") || theme.includes("latte") || theme === "noborder_light";
+    }
+
     function getSelectedTheme() {
       if (themeSelect.value === "custom") {
         return customCssInput.value.trim() || "https://example.com/style.css";
@@ -216,29 +220,47 @@
       updateGenerator();
     }
 
-    function postThemeToIframes(container, theme, lang) {
+    function updateContainerTheme(container, theme) {
+      if (isLightTheme(theme)) {
+        container.classList.remove("bg-[#0d1117]");
+        container.classList.add("bg-[#f6f8fa]");
+      } else {
+        container.classList.remove("bg-[#f6f8fa]");
+        container.classList.add("bg-[#0d1117]");
+      }
+    }
+
+    function postThemeToIframe(container, theme, lang) {
       const iframe = container.querySelector("iframe");
       if (iframe && iframe.contentWindow) {
-        iframe.contentWindow.postMessage({
+        const message = {
           giscus: {
             setConfig: {
               theme: theme,
               lang: lang
             }
           }
-        }, "*");
+        };
+        iframe.contentWindow.postMessage(message, "*");
       }
     }
 
     function renderWidget(container, repo, theme, lang) {
+      updateContainerTheme(container, theme);
       container.innerHTML = "";
+      
       const scriptTag = document.createElement("script");
-      scriptTag.src = SCRIPT_URL;
+      scriptTag.src = `${SCRIPT_URL}?v=${Date.now()}`;
       scriptTag.setAttribute("data-repo", repo);
       scriptTag.setAttribute("data-theme", theme);
       scriptTag.setAttribute("data-lang", lang);
       scriptTag.async = true;
+
       container.appendChild(scriptTag);
+
+      setTimeout(() => {
+        postThemeToIframe(container, theme, lang);
+      }, 300);
     }
 
     function updateGenerator() {
@@ -249,11 +271,7 @@
       const snippet = `<script src="${SCRIPT_URL}" data-repo="${repo}" data-theme="${theme}" data-lang="${lang}" async><\/script>`;
       codeOutput.textContent = snippet;
 
-      // Update Preview Widget
       renderWidget(previewContainer, repo, theme, lang);
-      postThemeToIframes(previewContainer, theme, lang);
-
-      // Update Demo Widget
       updateDemoWidget();
     }
 
@@ -263,7 +281,6 @@
       const lang = langSelect.value;
 
       renderWidget(demoContainer, demoRepo, theme, lang);
-      postThemeToIframes(demoContainer, theme, lang);
     }
 
     repoInput.addEventListener("input", updateGenerator);
