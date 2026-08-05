@@ -225,66 +225,82 @@
     function updateContainerTheme(container, theme) {
       if (isLightTheme(theme)) {
         container.classList.remove("bg-[#0d1117]", "border-[#30363d]");
-        container.classList.add("bg-[#ebedef]", "border-[#d0d7de]");
+        container.classList.add("bg-[#d1d5db]", "border-[#9ca3af]");
       } else {
-        container.classList.remove("bg-[#ebedef]", "border-[#d0d7de]");
+        container.classList.remove("bg-[#d1d5db]", "border-[#9ca3af]");
         container.classList.add("bg-[#0d1117]", "border-[#30363d]");
       }
     }
 
-    function postThemeToIframe(container, theme, lang) {
+    function fixIframeTheme(container, theme, lang) {
       const iframe = container.querySelector("iframe");
       if (!iframe) return;
 
-      const message = {
-        giscus: {
-          setConfig: {
-            theme: theme,
-            lang: lang
-          }
-        }
-      };
+      const isLight = isLightTheme(theme);
 
-      const send = () => {
+      // Force iframe widget background to white on light mode
+      iframe.style.backgroundColor = isLight ? "#ffffff" : "#0d1117";
+      iframe.style.borderRadius = "8px";
+      iframe.style.colorScheme = isLight ? "light" : "dark";
+
+      // Dynamically update the iframe URL theme parameter if present
+      if (iframe.src) {
+        try {
+          const url = new URL(iframe.src);
+          if (url.searchParams.get("theme") !== theme) {
+            url.searchParams.set("theme", theme);
+            url.searchParams.set("lang", lang);
+            iframe.src = url.toString();
+          }
+        } catch (e) {}
+      }
+
+      // Broadcast theme updates across supported iframe message protocols
+      const payloads = [
+        { giscus: { setConfig: { theme: theme, lang: lang } } },
+        { giscus: { setConfig: { theme: isLight && !theme.startsWith('http') ? `https://giscus.app/themes/${theme}.css` : theme, lang: lang } } },
+        { setConfig: { theme: theme, lang: lang } },
+        { theme: theme, lang: lang }
+      ];
+
+      payloads.forEach(msg => {
         try {
           if (iframe.contentWindow) {
-            iframe.contentWindow.postMessage(message, "*");
+            iframe.contentWindow.postMessage(msg, "*");
           }
         } catch (err) {}
-      };
-
-      send();
-      iframe.addEventListener("load", send);
-
-      // Repeatedly postMessage to catch delayed iframe script initialization inside GitContrib
-      [50, 150, 300, 600, 1000, 1800].forEach(delay => {
-        setTimeout(send, delay);
       });
     }
 
     function renderWidget(container, repo, theme, lang) {
       updateContainerTheme(container, theme);
+
+      // Clear container and clean up stale script tags to avoid script conflicts
       container.innerHTML = "";
+      document.querySelectorAll('script[src*="gitcontrib.vercel.app"]').forEach(s => s.remove());
 
       const scriptTag = document.createElement("script");
       scriptTag.src = `${SCRIPT_URL}?v=${Date.now()}`;
       scriptTag.setAttribute("data-repo", repo);
       scriptTag.setAttribute("data-theme", theme);
       scriptTag.setAttribute("data-lang", lang);
-      scriptTag.async = true;
+      scriptTag.async = false;
 
-      // Observe iframe insertion in real-time
+      // Watch for real-time iframe insertion
       const observer = new MutationObserver(() => {
         const iframe = container.querySelector("iframe");
         if (iframe) {
-          postThemeToIframe(container, theme, lang);
-          observer.disconnect();
+          fixIframeTheme(container, theme, lang);
         }
       });
       observer.observe(container, { childList: true, subtree: true });
 
       container.appendChild(scriptTag);
-      postThemeToIframe(container, theme, lang);
+
+      // Force retry styles across load lifecycle
+      [50, 150, 300, 600, 1000, 1800].forEach(delay => {
+        setTimeout(() => fixIframeTheme(container, theme, lang), delay);
+      });
     }
 
     function updateGenerator() {
