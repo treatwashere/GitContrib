@@ -97,13 +97,13 @@
             </optgroup>
           </select>
 
-          <!-- Custom CSS Input (hidden by default) -->
+          <!-- Custom CSS Input -->
           <div id="custom-css-wrapper" class="hidden mt-3">
             <label for="input-custom-css" class="block text-xs font-semibold text-[#f0f6fc] mb-1.5">Custom CSS URL</label>
             <input 
               type="text" 
               id="input-custom-css" 
-              placeholder="https://example.com/giscus.css" 
+              placeholder="https://example.com/style.css" 
               class="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-1.5 text-sm text-[#c9d1d9] focus:outline-none focus:border-[#58a6ff] focus:ring-1 focus:ring-[#58a6ff] font-mono"
             >
           </div>
@@ -202,7 +202,7 @@
 
     function getSelectedTheme() {
       if (themeSelect.value === "custom") {
-        return customCssInput.value.trim() || "https://example.com/giscus.css";
+        return customCssInput.value.trim() || "https://example.com/style.css";
       }
       return themeSelect.value;
     }
@@ -216,6 +216,31 @@
       updateGenerator();
     }
 
+    function postThemeToIframes(container, theme, lang) {
+      const iframe = container.querySelector("iframe");
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage({
+          giscus: {
+            setConfig: {
+              theme: theme,
+              lang: lang
+            }
+          }
+        }, "*");
+      }
+    }
+
+    function renderWidget(container, repo, theme, lang) {
+      container.innerHTML = "";
+      const scriptTag = document.createElement("script");
+      scriptTag.src = SCRIPT_URL;
+      scriptTag.setAttribute("data-repo", repo);
+      scriptTag.setAttribute("data-theme", theme);
+      scriptTag.setAttribute("data-lang", lang);
+      scriptTag.async = true;
+      container.appendChild(scriptTag);
+    }
+
     function updateGenerator() {
       const repo = repoInput.value.trim() || "owner/repo";
       const theme = getSelectedTheme();
@@ -224,15 +249,11 @@
       const snippet = `<script src="${SCRIPT_URL}" data-repo="${repo}" data-theme="${theme}" data-lang="${lang}" async><\/script>`;
       codeOutput.textContent = snippet;
 
-      // Re-render live preview
-      previewContainer.innerHTML = "";
-      const scriptTag = document.createElement("script");
-      scriptTag.src = SCRIPT_URL;
-      scriptTag.setAttribute("data-repo", repo);
-      scriptTag.setAttribute("data-theme", theme);
-      scriptTag.setAttribute("data-lang", lang);
-      previewContainer.appendChild(scriptTag);
+      // Update Preview Widget
+      renderWidget(previewContainer, repo, theme, lang);
+      postThemeToIframes(previewContainer, theme, lang);
 
+      // Update Demo Widget
       updateDemoWidget();
     }
 
@@ -241,13 +262,8 @@
       const theme = getSelectedTheme();
       const lang = langSelect.value;
 
-      demoContainer.innerHTML = "";
-      const scriptTag = document.createElement("script");
-      scriptTag.src = SCRIPT_URL;
-      scriptTag.setAttribute("data-repo", demoRepo);
-      scriptTag.setAttribute("data-theme", theme);
-      scriptTag.setAttribute("data-lang", lang);
-      demoContainer.appendChild(scriptTag);
+      renderWidget(demoContainer, demoRepo, theme, lang);
+      postThemeToIframes(demoContainer, theme, lang);
     }
 
     repoInput.addEventListener("input", updateGenerator);
