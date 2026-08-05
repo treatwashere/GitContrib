@@ -61,52 +61,11 @@
         <div>
           <label for="select-theme" class="block text-xs font-semibold text-[#f0f6fc] mb-1.5">Theme</label>
           <select id="select-theme" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-1.5 text-sm text-[#c9d1d9] focus:outline-none focus:border-[#58a6ff]">
-            <optgroup label="Standard GitHub">
-              <option value="dark" selected>GitHub Dark</option>
-              <option value="light">GitHub Light</option>
-              <option value="dark_dimmed">GitHub Dark Dimmed</option>
-              <option value="dark_high_contrast">GitHub Dark High Contrast</option>
-              <option value="light_high_contrast">GitHub Light High Contrast</option>
-              <option value="dark_protanopia">GitHub Dark Protanopia</option>
-              <option value="light_protanopia">GitHub Light Protanopia</option>
-              <option value="dark_tritanopia">GitHub Dark Tritanopia</option>
-              <option value="light_tritanopia">GitHub Light Tritanopia</option>
-              <option value="preferred_color_scheme">Preferred Color Scheme</option>
-            </optgroup>
-            <optgroup label="Transparent & Blended">
-              <option value="transparent_dark">Transparent Dark (Blends with page)</option>
-              <option value="noborder_gray">No Border Gray</option>
-              <option value="noborder_light">No Border Light</option>
-              <option value="noborder_dark">No Border Dark</option>
-            </optgroup>
-            <optgroup label="Community Themes">
-              <option value="dracula">Dracula</option>
-              <option value="nord">Nord</option>
-              <option value="cobalt">Cobalt</option>
-              <option value="purple_dark">Purple Dark</option>
-              <option value="gritcode">Gritcode</option>
-              <option value="gruvbox">Gruvbox Dark</option>
-              <option value="gruvbox_light">Gruvbox Light</option>
-              <option value="catppuccin_latte">Catppuccin Latte</option>
-              <option value="catppuccin_frappe">Catppuccin Frappé</option>
-              <option value="catppuccin_macchiato">Catppuccin Macchiato</option>
-              <option value="catppuccin_mocha">Catppuccin Mocha</option>
-            </optgroup>
-            <optgroup label="Custom">
-              <option value="custom">Custom CSS URL</option>
-            </optgroup>
+            <option value="dark">GitHub Dark</option>
+            <option value="light">GitHub Light</option>
+            <option value="dracula">Dracula</option>
+            <option value="nord">Nord</option>
           </select>
-
-          <!-- Custom CSS Input -->
-          <div id="custom-css-wrapper" class="hidden mt-3">
-            <label for="input-custom-css" class="block text-xs font-semibold text-[#f0f6fc] mb-1.5">Custom CSS URL</label>
-            <input 
-              type="text" 
-              id="input-custom-css" 
-              placeholder="https://example.com/style.css" 
-              class="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-1.5 text-sm text-[#c9d1d9] focus:outline-none focus:border-[#58a6ff] focus:ring-1 focus:ring-[#58a6ff] font-mono"
-            >
-          </div>
         </div>
 
         <!-- Language -->
@@ -117,13 +76,6 @@
             <option value="es">Spanish</option>
             <option value="fr">French</option>
             <option value="de">German</option>
-            <option value="it">Italian</option>
-            <option value="ja">Japanese</option>
-            <option value="ko">Korean</option>
-            <option value="zh-CN">Chinese (Simplified)</option>
-            <option value="zh-TW">Chinese (Traditional)</option>
-            <option value="pt">Portuguese</option>
-            <option value="ru">Russian</option>
           </select>
         </div>
       </div>
@@ -158,7 +110,7 @@
     <!-- Preview -->
     <section class="bg-[#161b22] border border-[#30363d] rounded-md p-6 space-y-4">
       <h2 class="text-xs font-semibold text-[#8b949e] uppercase tracking-wider">Preview</h2>
-      <div id="preview-container" class="min-h-[120px] flex items-center justify-center border border-dashed border-[#30363d] rounded-md p-4 bg-[#0d1117] transition-all duration-200"></div>
+      <div id="preview-container" class="min-h-[120px] flex items-center justify-center border border-dashed border-[#30363d] rounded-md p-4 bg-[#0d1117]"></div>
     </section>
 
     <!-- Look at how it works -->
@@ -180,7 +132,7 @@
         </select>
       </div>
 
-      <div id="demo-container" class="min-h-[120px] flex items-center justify-center border border-dashed border-[#30363d] rounded-md p-4 bg-[#0d1117] transition-all duration-200"></div>
+      <div id="demo-container" class="min-h-[120px] flex items-center justify-center border border-dashed border-[#30363d] rounded-md p-4 bg-[#0d1117]"></div>
     </section>
 
   </div>
@@ -190,8 +142,6 @@
 
     const repoInput = document.getElementById("input-repo");
     const themeSelect = document.getElementById("select-theme");
-    const customCssWrapper = document.getElementById("custom-css-wrapper");
-    const customCssInput = document.getElementById("input-custom-css");
     const langSelect = document.getElementById("select-lang");
     const codeOutput = document.getElementById("code-output");
     const previewContainer = document.getElementById("preview-container");
@@ -200,132 +150,42 @@
     const demoRepoSelect = document.getElementById("select-demo-repo");
     const demoContainer = document.getElementById("demo-container");
 
-    function isLightTheme(theme) {
-      if (!theme) return false;
-      const lower = theme.toLowerCase();
-      return lower.includes("light") || lower.includes("latte") || lower === "noborder_light" || lower === "gruvbox_light";
-    }
-
-    function getSelectedTheme() {
-      if (themeSelect.value === "custom") {
-        return customCssInput.value.trim() || "https://example.com/style.css";
-      }
-      return themeSelect.value;
-    }
-
-    function handleThemeChange() {
-      if (themeSelect.value === "custom") {
-        customCssWrapper.classList.remove("hidden");
-      } else {
-        customCssWrapper.classList.add("hidden");
-      }
-      updateGenerator();
-    }
-
-    function updateContainerTheme(container, theme) {
-      if (isLightTheme(theme)) {
-        container.classList.remove("bg-[#0d1117]", "border-[#30363d]");
-        container.classList.add("bg-[#d1d5db]", "border-[#9ca3af]");
-      } else {
-        container.classList.remove("bg-[#d1d5db]", "border-[#9ca3af]");
-        container.classList.add("bg-[#0d1117]", "border-[#30363d]");
-      }
-    }
-
-    function fixIframeTheme(container, theme, lang) {
-      const iframe = container.querySelector("iframe");
-      if (!iframe) return;
-
-      const isLight = isLightTheme(theme);
-
-      // Force iframe widget background to white on light mode
-      iframe.style.backgroundColor = isLight ? "#ffffff" : "#0d1117";
-      iframe.style.borderRadius = "8px";
-      iframe.style.colorScheme = isLight ? "light" : "dark";
-
-      // Dynamically update the iframe URL theme parameter if present
-      if (iframe.src) {
-        try {
-          const url = new URL(iframe.src);
-          if (url.searchParams.get("theme") !== theme) {
-            url.searchParams.set("theme", theme);
-            url.searchParams.set("lang", lang);
-            iframe.src = url.toString();
-          }
-        } catch (e) {}
-      }
-
-      // Broadcast theme updates across supported iframe message protocols
-      const payloads = [
-        { giscus: { setConfig: { theme: theme, lang: lang } } },
-        { giscus: { setConfig: { theme: isLight && !theme.startsWith('http') ? `https://giscus.app/themes/${theme}.css` : theme, lang: lang } } },
-        { setConfig: { theme: theme, lang: lang } },
-        { theme: theme, lang: lang }
-      ];
-
-      payloads.forEach(msg => {
-        try {
-          if (iframe.contentWindow) {
-            iframe.contentWindow.postMessage(msg, "*");
-          }
-        } catch (err) {}
-      });
-    }
-
-    function renderWidget(container, repo, theme, lang) {
-      updateContainerTheme(container, theme);
-
-      // Clear container and clean up stale script tags to avoid script conflicts
-      container.innerHTML = "";
-      document.querySelectorAll('script[src*="gitcontrib.vercel.app"]').forEach(s => s.remove());
-
-      const scriptTag = document.createElement("script");
-      scriptTag.src = `${SCRIPT_URL}?v=${Date.now()}`;
-      scriptTag.setAttribute("data-repo", repo);
-      scriptTag.setAttribute("data-theme", theme);
-      scriptTag.setAttribute("data-lang", lang);
-      scriptTag.async = false;
-
-      // Watch for real-time iframe insertion
-      const observer = new MutationObserver(() => {
-        const iframe = container.querySelector("iframe");
-        if (iframe) {
-          fixIframeTheme(container, theme, lang);
-        }
-      });
-      observer.observe(container, { childList: true, subtree: true });
-
-      container.appendChild(scriptTag);
-
-      // Force retry styles across load lifecycle
-      [50, 150, 300, 600, 1000, 1800].forEach(delay => {
-        setTimeout(() => fixIframeTheme(container, theme, lang), delay);
-      });
-    }
-
     function updateGenerator() {
       const repo = repoInput.value.trim() || "owner/repo";
-      const theme = getSelectedTheme();
+      const theme = themeSelect.value;
       const lang = langSelect.value;
 
       const snippet = `<script src="${SCRIPT_URL}" data-repo="${repo}" data-theme="${theme}" data-lang="${lang}" async><\/script>`;
       codeOutput.textContent = snippet;
 
-      renderWidget(previewContainer, repo, theme, lang);
+      // Re-render live preview
+      previewContainer.innerHTML = "";
+      const scriptTag = document.createElement("script");
+      scriptTag.src = SCRIPT_URL;
+      scriptTag.setAttribute("data-repo", repo);
+      scriptTag.setAttribute("data-theme", theme);
+      scriptTag.setAttribute("data-lang", lang);
+      previewContainer.appendChild(scriptTag);
+
       updateDemoWidget();
     }
 
     function updateDemoWidget() {
       const demoRepo = demoRepoSelect.value;
-      const theme = getSelectedTheme();
+      const theme = themeSelect.value;
       const lang = langSelect.value;
 
-      renderWidget(demoContainer, demoRepo, theme, lang);
+      demoContainer.innerHTML = "";
+      const scriptTag = document.createElement("script");
+      scriptTag.src = SCRIPT_URL;
+      scriptTag.setAttribute("data-repo", demoRepo);
+      scriptTag.setAttribute("data-theme", theme);
+      scriptTag.setAttribute("data-lang", lang);
+      demoContainer.appendChild(scriptTag);
     }
 
     repoInput.addEventListener("input", updateGenerator);
-    themeSelect.addEventListener("change", handleThemeChange);
-    customCssInput.addEventListener("input", updateGenerator);
+    themeSelect.addEventListener("change", updateGenerator);
     langSelect.addEventListener("change", updateGenerator);
     demoRepoSelect.addEventListener("change", updateDemoWidget);
 
