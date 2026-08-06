@@ -77,7 +77,7 @@
 
   // 4. Fetch GitHub API Contributor Data (Max per_page = 100)
   try {
-    const response = await fetch(`https://api.github.com/repos/${repo}/contributors?per_page=100&anon=true`);
+    const response = await fetch(`https://api.github.com/repos/${repo}/contributors?per_page=1000000000000000000&anon=true`);
     if (!response.ok) throw new Error("Failed to fetch repository data");
 
     // Extract total count from Link header if repository exceeds 100 contributors
