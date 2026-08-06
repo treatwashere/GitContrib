@@ -1,6 +1,6 @@
 # GitContrib 👥
 
-A lightweight, embeddable GitHub contributors widget inspired by Giscus. Showcase your repository's contributors on any blog, docs, or portfolio site with a single `<script>` tag.
+A lightweight, embeddable GitHub contributors widget. Showcase your repository's contributors on any blog, docs, or portfolio site with a single `<script>` tag.
 
 [![GitContrib](https://gitcontrib.vercel.app/)
 
@@ -11,4 +11,4 @@ A lightweight, embeddable GitHub contributors widget inspired by Giscus. Showcas
 - **🎨 Built-in Themes:** Pre-styled themes for GitHub Dark, GitHub Light, Dracula, and Nord.
 - **🌐 Multi-Language:** Native translation support for English, Spanish, French, and German.
 - **📈 Auto-Expanding Grid:** Displays all repository contributors with profile links and commit counts on hover.
-- **🚀 Easy Deployment:** Deploy your own configurator dashboard and widget script on Vercel 
+- ** 🐙😺GitHub API:** This uses the GitHub REST API for the contributor widget to work.
