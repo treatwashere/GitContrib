@@ -15,4 +15,6 @@ A lightweight, embeddable GitHub contributors widget. Showcase your repository's
 - **📈 Auto-Expanding Grid:** Displays all repository contributors with profile links and commit counts on hover.
 - ** 🐙😺GitHub API:** This uses the GitHub REST API for the contributor widget to work.
 
-https://raw.githubusercontent.com/treatwashere/Memerz/refs/heads/main/powered-by-vercel.svg
+[![Powered by Vercel](https://raw.githubusercontent.com/treatwashere/Memerz/refs/heads/main/powered-by-vercel.svg)][vercel]
+
+[vercel]: https://vercel.com/?utm_source=gitcontrib&utm_campaign=oss
