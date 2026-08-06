@@ -2,7 +2,7 @@
 
 A lightweight, embeddable GitHub contributors widget. Showcase your repository's contributors on any blog, docs, or portfolio site with a single `<script>` tag.
 
-[![GitContrib](https://gitcontrib.vercel.app/)
+[GitContrib](https://gitcontrib.vercel.app/)
 
 ## ✨ Features
 
