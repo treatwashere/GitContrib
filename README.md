@@ -4,7 +4,6 @@ A lightweight, embeddable GitHub contributors widget. Showcase your repository's
 
 [![GitContrib](assets/gitcontrib.jpg)][gitcontrib]
 
-[gitcontrib]: width=150
 [gitcontrib]: https://gitcontrib.vercel.app
 
 ## ✨ Features
@@ -15,3 +14,5 @@ A lightweight, embeddable GitHub contributors widget. Showcase your repository's
 - **🌐 Multi-Language:** Native translation support for English, Spanish, French, and German.
 - **📈 Auto-Expanding Grid:** Displays all repository contributors with profile links and commit counts on hover.
 - ** 🐙😺GitHub API:** This uses the GitHub REST API for the contributor widget to work.
+
+https://raw.githubusercontent.com/treatwashere/Memerz/refs/heads/main/powered-by-vercel.svg
