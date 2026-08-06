@@ -1,212 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GitContrib - Embeddable GitHub Contributors Widget</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-body {
-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contributors Widget Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-[#0d1117] text-[#c9d1d9] min-h-screen py-10 px-4">
+<body class="bg-gray-950 text-gray-100 min-h-screen p-6 font-sans">
+  <div class="max-w-3xl mx-auto space-y-6">
 
-<div class="max-w-3xl mx-auto space-y-8">
+    <header class="border-b border-gray-800 pb-4">
+      <h1 class="text-2xl font-bold text-white">GitHub Contributors Widget Setup</h1>
+      <p class="text-sm text-gray-400">Configure your repository widget and copy the embed code.</p>
+    </header>
 
-<!-- Header -->
-<header class="text-center space-y-3 pb-6 border-b border-[#21262d]">
-<div class="inline-flex items-center gap-2 text-white font-semibold text-2xl">
-<svg height="32" width="32" viewBox="0 0 16 16" fill="currentColor" class="text-[#58a6ff]">
-<path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
-</svg>
-        <span>GitContrib</span>
-</div>
-<p class="text-[#8b949e] text-sm max-w-lg mx-auto">
-A lightweight, embeddable widget powered by GitHub API. Choose a repository, customize the theme, and copy your script snippet.
-</p>
-</header>
-
-<!-- Step 1: Repository -->
-<section class="bg-[#161b22] border border-[#30363d] rounded-md p-6 space-y-4">
-<div class="flex items-center gap-2 border-b border-[#21262d] pb-3">
-<span class="bg-[#21262d] text-[#58a6ff] text-xs font-semibold px-2.5 py-1 rounded-full border border-[#30363d]">1</span>
-<h2 class="text-base font-semibold text-[#f0f6fc]">Repository</h2>
-</div>
-
-<p class="text-xs text-[#8b949e]">Choose the repository you want to link to this widget.</p>
-
-<div>
-<label for="input-repo" class="block text-xs font-semibold text-[#f0f6fc] mb-1.5">Repository target</label>
-<input 
-type="text" 
-id="input-repo" 
-          value=""
-placeholder="owner/repo" 
-class="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-1.5 text-sm text-[#c9d1d9] focus:outline-none focus:border-[#58a6ff] focus:ring-1 focus:ring-[#58a6ff] font-mono"
->
-</div>
-</section>
-
-<!-- Step 2: Customization -->
-<section class="bg-[#161b22] border border-[#30363d] rounded-md p-6 space-y-4">
-<div class="flex items-center gap-2 border-b border-[#21262d] pb-3">
-<span class="bg-[#21262d] text-[#58a6ff] text-xs font-semibold px-2.5 py-1 rounded-full border border-[#30363d]">2</span>
-<h2 class="text-base font-semibold text-[#f0f6fc]">Configuration</h2>
-</div>
-
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<!-- Theme -->
-<div>
-<label for="select-theme" class="block text-xs font-semibold text-[#f0f6fc] mb-1.5">Theme</label>
-<select id="select-theme" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-1.5 text-sm text-[#c9d1d9] focus:outline-none focus:border-[#58a6ff]">
-<option value="dark">GitHub Dark</option>
-<option value="light">GitHub Light</option>
-<option value="dracula">Dracula</option>
-<option value="nord">Nord</option>
-</select>
-</div>
-
-<!-- Language -->
-<div>
-<label for="select-lang" class="block text-xs font-semibold text-[#f0f6fc] mb-1.5">Language</label>
-<select id="select-lang" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-1.5 text-sm text-[#c9d1d9] focus:outline-none focus:border-[#58a6ff]">
-<option value="en">English</option>
-<option value="es">Spanish</option>
-<option value="fr">French</option>
-<option value="de">German</option>
-</select>
-</div>
-</div>
-</section>
-
-<!-- Step 3: Embed Snippet -->
-<section class="bg-[#161b22] border border-[#30363d] rounded-md p-6 space-y-4">
-<div class="flex items-center justify-between border-b border-[#21262d] pb-3">
-<div class="flex items-center gap-2">
-<span class="bg-[#21262d] text-[#58a6ff] text-xs font-semibold px-2.5 py-1 rounded-full border border-[#30363d]">3</span>
-<h2 class="text-base font-semibold text-[#f0f6fc]">Enable contributors</h2>
-</div>
-<button 
-id="copy-btn" 
-class="bg-[#238636] hover:bg-[#2ea043] text-white text-xs font-semibold px-3 py-1.5 rounded-md transition-colors border border-[rgba(240,246,252,0.1)] flex items-center gap-1.5"
->
-<svg height="14" width="14" viewBox="0 0 16 16" fill="currentColor">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
-</svg>
-Copy
-</button>
-</div>
-
-<p class="text-xs text-[#8b949e]">Place the following <code class="text-[#79c0ff] bg-[#0d1117] px-1 py-0.5 rounded">&lt;script&gt;</code> tag where you want the widget to render on your page.</p>
-
-<div class="relative">
-<pre class="bg-[#0d1117] border border-[#30363d] rounded-md p-3 text-xs text-[#79c0ff] font-mono overflow-x-auto leading-relaxed"><code id="code-output"></code></pre>
-</div>
-</section>
-
-<!-- Preview -->
-<section class="bg-[#161b22] border border-[#30363d] rounded-md p-6 space-y-4">
-      <h2 class="text-xs font-semibold text-[#8b949e] uppercase tracking-wider">Preview</h2>
-<div id="preview-container" class="min-h-[120px] flex items-center justify-center border border-dashed border-[#30363d] rounded-md p-4 bg-[#0d1117]"></div>
-</section>
-
-    <!-- Look at how it works -->
-    <section class="bg-[#161b22] border border-[#30363d] rounded-md p-6 space-y-4">
-      <div class="border-b border-[#21262d] pb-3">
-        <h2 class="text-base font-semibold text-[#f0f6fc]">Look at how it works</h2>
-      </div>
-
-      <p class="text-xs text-[#8b949e]">Select a featured repository below to preview GitContrib running live in real-time.</p>
-
+    <!-- Configuration Panel -->
+    <div class="bg-gray-900 p-6 rounded-xl border border-gray-800 space-y-4">
+      
+      <!-- Repository Input -->
       <div>
-        <label for="select-demo-repo" class="block text-xs font-semibold text-[#f0f6fc] mb-1.5">Select Repository</label>
-        <select id="select-demo-repo" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-1.5 text-sm text-[#c9d1d9] focus:outline-none focus:border-[#58a6ff]">
-          <option value="giscus/giscus">giscus/giscus</option>
-          <option value="jellyfin/jellyfin.org">jellyfin/jellyfin.org</option>
-          <option value="treatwashere/Memerz">treatwashere/Memerz</option>
-          <option value="treatwashere/resonus">treatwashere/resonus</option>
-          <option value="treatwashere/GitContrib" selected>treatwashere/GitContrib</option>
-        </select>
+        <label class="block text-sm font-medium mb-1">GitHub Repository</label>
+        <input type="text" id="input-repo" value="facebook/react" placeholder="owner/repo or https://github.com/owner/repo" class="w-full bg-gray-950 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
       </div>
 
-      <div id="demo-container" class="min-h-[120px] flex items-center justify-center border border-dashed border-[#30363d] rounded-md p-4 bg-[#0d1117]"></div>
-    </section>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Theme Swapper -->
+        <div>
+          <label class="block text-sm font-medium mb-1">Theme</label>
+          <select id="select-theme" class="w-full bg-gray-950 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+            <option value="dark">GitHub Dark</option>
+            <option value="light">GitHub Light</option>
+            <option value="dracula">Dracula</option>
+            <option value="nord">Nord</option>
+          </select>
+        </div>
 
-</div>
+        <!-- Language Picker -->
+        <div>
+          <label class="block text-sm font-medium mb-1">Language</label>
+          <select id="select-lang" class="w-full bg-gray-950 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+          </select>
+        </div>
+      </div>
 
-<script>
-    // Update this with your live Vercel domain once deployed
-const SCRIPT_URL = "https://gitcontrib.vercel.app/widget.js";
+    </div>
 
-const repoInput = document.getElementById("input-repo");
-const themeSelect = document.getElementById("select-theme");
-const langSelect = document.getElementById("select-lang");
-const codeOutput = document.getElementById("code-output");
-const previewContainer = document.getElementById("preview-container");
-const copyBtn = document.getElementById("copy-btn");
+    <!-- Live Preview -->
+    <div class="bg-gray-900 p-6 rounded-xl border border-gray-800">
+      <h2 class="text-sm font-medium mb-3 text-gray-400">Preview</h2>
+      <div id="preview-container" class="min-h-[100px] flex items-center justify-center border border-dashed border-gray-800 rounded-lg p-4"></div>
+    </div>
 
-    const demoRepoSelect = document.getElementById("select-demo-repo");
-    const demoContainer = document.getElementById("demo-container");
+    <!-- Output Code Snippet -->
+    <div class="bg-gray-900 p-6 rounded-xl border border-gray-800">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-sm font-medium text-gray-400">Embed Code</h2>
+        <button id="copy-btn" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-3 py-1.5 rounded-md transition-colors">Copy Code</button>
+      </div>
+      <pre class="bg-gray-950 border border-gray-800 rounded-lg p-3 text-xs text-green-400 overflow-x-auto"><code id="code-output"></code></pre>
+    </div>
 
-function updateGenerator() {
-const repo = repoInput.value.trim() || "owner/repo";
-const theme = themeSelect.value;
-const lang = langSelect.value;
+  </div>
 
-const snippet = `<script src="${SCRIPT_URL}" data-repo="${repo}" data-theme="${theme}" data-lang="${lang}" async><\/script>`;
-codeOutput.textContent = snippet;
+  <script>
+    // Host URL where your widget.js script is stored
+    const SCRIPT_URL = "https://your-domain.com/widget.js";
 
-// Re-render live preview
-previewContainer.innerHTML = "";
-const scriptTag = document.createElement("script");
-scriptTag.src = SCRIPT_URL;
-scriptTag.setAttribute("data-repo", repo);
-scriptTag.setAttribute("data-theme", theme);
-scriptTag.setAttribute("data-lang", lang);
-previewContainer.appendChild(scriptTag);
+    const repoInput = document.getElementById("input-repo");
+    const themeSelect = document.getElementById("select-theme");
+    const langSelect = document.getElementById("select-lang");
+    const codeOutput = document.getElementById("code-output");
+    const previewContainer = document.getElementById("preview-container");
+    const copyBtn = document.getElementById("copy-btn");
 
-      updateDemoWidget();
-    }
-
-    function updateDemoWidget() {
-      const demoRepo = demoRepoSelect.value;
+    function updateGenerator() {
+      const repo = repoInput.value.trim() || "owner/repo";
       const theme = themeSelect.value;
       const lang = langSelect.value;
 
-      demoContainer.innerHTML = "";
+      // Generate 1-line script tag
+      const snippet = `<script src="${SCRIPT_URL}" data-repo="${repo}" data-theme="${theme}" data-lang="${lang}" async><\/script>`;
+      codeOutput.textContent = snippet;
+
+      // Refresh Live Preview
+      previewContainer.innerHTML = "";
       const scriptTag = document.createElement("script");
       scriptTag.src = SCRIPT_URL;
-      scriptTag.setAttribute("data-repo", demoRepo);
+      scriptTag.setAttribute("data-repo", repo);
       scriptTag.setAttribute("data-theme", theme);
       scriptTag.setAttribute("data-lang", lang);
-      demoContainer.appendChild(scriptTag);
-}
+      previewContainer.appendChild(scriptTag);
+    }
 
-repoInput.addEventListener("input", updateGenerator);
-themeSelect.addEventListener("change", updateGenerator);
-langSelect.addEventListener("change", updateGenerator);
-    demoRepoSelect.addEventListener("change", updateDemoWidget);
+    repoInput.addEventListener("input", updateGenerator);
+    themeSelect.addEventListener("change", updateGenerator);
+    langSelect.addEventListener("change", updateGenerator);
 
-copyBtn.addEventListener("click", () => {
-navigator.clipboard.writeText(codeOutput.textContent);
-copyBtn.innerHTML = `
-       <svg height="14" width="14" viewBox="0 0 16 16" fill="currentColor">
-         <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
-       </svg> Copied!
-     `;
-setTimeout(() => {
-copyBtn.innerHTML = `
-         <svg height="14" width="14" viewBox="0 0 16 16" fill="currentColor">
-           <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path>
-           <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
-         </svg> Copy
-       `;
-}, 2000);
-});
+    copyBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText(codeOutput.textContent);
+      copyBtn.textContent = "Copied!";
+      setTimeout(() => copyBtn.textContent = "Copy Code", 2000);
+    });
 
-updateGenerator();
-</script>
+    updateGenerator();
+  </script>
 </body>
+</html>
