@@ -75,32 +75,34 @@
 
   currentScript.parentNode.insertBefore(container, currentScript.nextSibling);
 
-  // 4. Fetch GitHub API Contributor Data (Max per_page = 100)
+  // 4. Fetch ALL Contributors using a Pagination Loop
   try {
-    const response = await fetch(`https://api.github.com/repos/${repo}/contributors?per_page=1000000000000000000&anon=true`);
-    if (!response.ok) throw new Error("Failed to fetch repository data");
+    let allContributors = [];
+    let page = 1;
+    let keepFetching = true;
 
-    // Extract total count from Link header if repository exceeds 100 contributors
-    let totalCount = 0;
-    const linkHeader = response.headers.get("Link");
-    
-    if (linkHeader) {
-      const match = linkHeader.match(/page=(\d+)>; rel="last"/);
-      if (match) {
-        // Approximate total by last page * 100
-        totalCount = parseInt(match[1], 10) * 100;
+    while (keepFetching && page <= 10) { // Fetch up to 1000 contributors max
+      const res = await fetch(`https://api.github.com/repos/${repo}/contributors?per_page=100&anon=true&page=${page}`);
+      if (!res.ok) break;
+
+      const data = await res.json();
+      if (!Array.isArray(data) || data.length === 0) {
+        keepFetching = false;
+      } else {
+        allContributors = allContributors.concat(data);
+        page++;
       }
     }
 
-    const contributors = await response.json();
+    if (allContributors.length === 0) throw new Error("No contributors found");
+
     const countBadge = container.querySelector("#gitcontrib-count");
     const listContainer = container.querySelector("#gitcontrib-list");
 
-    // Show exact count if under 100, or formatted 100+ estimate if larger
-    countBadge.textContent = totalCount > 100 ? `${totalCount}+` : contributors.length;
+    countBadge.textContent = allContributors.length;
     listContainer.innerHTML = "";
 
-    contributors.forEach(user => {
+    allContributors.forEach(user => {
       const avatarLink = document.createElement("a");
       avatarLink.href = user.html_url || `https://github.com/${repo}`;
       avatarLink.target = "_blank";
