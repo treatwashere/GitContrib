@@ -10,10 +10,80 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
     }
     
-    .info {
-    align-items: center;
-    border: 100px;
-    }
+    /* Header container */
+.start-info {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #f8f9fa;
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Inner layout */
+.start-info .info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+/* Text styling */
+.start-info .info-text {
+  font-size: 1.1rem;
+  color: #334155;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* Links container */
+.start-info .info-links {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Boxicons-inspired button styling */
+.start-info .box-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+/* Primary Button (Boxicons Solid/Dark Theme Style) */
+.start-info .box-btn.primary {
+  background-color: #0f172a;
+  color: #ffffff;
+  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.1), 0 2px 4px -2px rgba(15, 23, 42, 0.1);
+}
+
+.start-info .box-btn.primary:hover {
+  background-color: #1e293b;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 8px -1px rgba(15, 23, 42, 0.15);
+}
+
+/* Secondary Button (Boxicons Outlined/Light Theme Style) */
+.start-info .box-btn.secondary {
+  background-color: #ffffff;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.start-info .box-btn.secondary:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+  transform: translateY(-1px);
+}
   </style>
 </head>
 <body class="bg-[#0d1117] text-[#c9d1d9] min-h-screen py-10 px-4">
@@ -34,9 +104,11 @@
     </header>
 
 <header class="start-info">
-<div class="info">
-<span class"info-text">An easy contributor widget to show all your repositorys contributors!</span>
-<a href="/code/widget.html">Get your widget!</a>
-<a href="/code/widget.html">How it was made!</a>
-</div>
+  <div class="info">
+    <span class="info-text">An easy contributor widget to show all your repository's contributors!</span>
+    <div class="info-links">
+      <a href="/code/widget.html" class="box-btn primary">Get your widget!</a>
+      <a href="/code/widget.html" class="box-btn secondary">How it was made!</a>
+    </div>
+  </div>
 </header>
