@@ -85,6 +85,317 @@
   transform: translateY(-1px);
 }
 
+.figma-card {
+  --card-bg: #101114;
+  --text: #ffffff;
+  --muted: #a5a7ad;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  width: min(100%, 720px);
+  min-height: 420px;
+
+  padding: 48px;
+  box-sizing: border-box;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+
+  background: var(--card-bg);
+  color: var(--text);
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.28);
+}
+
+
+/* ------------------------------
+   DOTTED BACKGROUND
+-------------------------------- */
+
+.figma-card__dots {
+  position: absolute;
+  z-index: -1;
+
+  inset: 0;
+
+  opacity: 0.55;
+
+  background-image:
+    radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.16) 1px,
+      transparent 1px
+    );
+
+  background-size: 18px 18px;
+
+  /*
+    Fade the dots toward the edges.
+  */
+  mask-image:
+    radial-gradient(
+      ellipse at center,
+      black 20%,
+      transparent 78%
+    );
+
+  -webkit-mask-image:
+    radial-gradient(
+      ellipse at center,
+      black 20%,
+      transparent 78%
+    );
+}
+
+
+/* ------------------------------
+   ICON AREA
+-------------------------------- */
+
+.figma-card__icons {
+  display: flex;
+  align-items: center;
+
+  height: 100px;
+  margin-bottom: 32px;
+
+  position: relative;
+}
+
+
+/* Individual icon containers */
+
+.brand-icon {
+  width: 76px;
+  height: 76px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 20px;
+
+  background: #181a1f;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+
+/* Figma icon */
+
+.brand-icon--figma {
+  position: relative;
+  z-index: 2;
+
+  transform: rotate(-7deg);
+}
+
+.brand-icon--figma svg {
+  width: 38px;
+  height: 57px;
+}
+
+
+/* GitContrib icon */
+
+.brand-icon--gitcontrib {
+  position: relative;
+  z-index: 3;
+
+  margin-left: -14px;
+
+  transform: rotate(7deg);
+}
+
+.brand-icon--gitcontrib img {
+  width: 58px;
+  height: 58px;
+
+  display: block;
+
+  object-fit: cover;
+  object-position: center;
+
+  border-radius: 50%;
+}
+
+
+/* Little connecting line */
+
+.figma-card__icons::after {
+  content: "";
+
+  position: absolute;
+
+  left: 62px;
+  top: 50%;
+
+  width: 42px;
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,0.1),
+      rgba(255,255,255,0.35)
+    );
+
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+
+/* ------------------------------
+   CONTENT
+-------------------------------- */
+
+.figma-card__content {
+  position: relative;
+  z-index: 4;
+
+  max-width: 520px;
+}
+
+
+.figma-card__eyebrow {
+  display: inline-block;
+
+  margin-bottom: 14px;
+
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+
+  color: #8f939c;
+}
+
+
+.figma-card h2 {
+  margin: 0;
+
+  font-size: clamp(32px, 5vw, 48px);
+  line-height: 1.03;
+  letter-spacing: -0.045em;
+  font-weight: 700;
+}
+
+
+.figma-card p {
+  max-width: 460px;
+
+  margin: 18px 0 28px;
+
+  color: var(--muted);
+
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+
+/* ------------------------------
+   BUTTON
+-------------------------------- */
+
+.figma-card__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 12px 17px;
+
+  border-radius: 11px;
+
+  background: #ffffff;
+  color: #101114;
+
+  font-size: 14px;
+  font-weight: 650;
+
+  text-decoration: none;
+
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+
+.figma-card__button span {
+  font-size: 17px;
+  line-height: 1;
+}
+
+
+.figma-card__button:hover {
+  transform: translateY(-2px);
+
+  background: #f0f0f0;
+
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.25);
+}
+
+
+.figma-card__button:active {
+  transform: translateY(0);
+}
+
+
+/* ------------------------------
+   MOBILE
+-------------------------------- */
+
+@media (max-width: 600px) {
+  .figma-card {
+    min-height: auto;
+    padding: 32px 26px;
+    border-radius: 22px;
+  }
+
+  .figma-card__icons {
+    height: 82px;
+    margin-bottom: 26px;
+  }
+
+  .brand-icon {
+    width: 62px;
+    height: 62px;
+    border-radius: 16px;
+  }
+
+  .brand-icon--figma svg {
+    width: 30px;
+    height: 45px;
+  }
+
+  .brand-icon--gitcontrib img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .figma-card h2 {
+    font-size: 34px;
+  }
+
+  .figma-card p {
+    font-size: 15px;
+  }
+}
+
   </style>
 </head>
 <body class="bg-[#0d1117] text-[#c9d1d9] min-h-screen py-10 px-4">
@@ -113,3 +424,49 @@
     </div>
   </div>
 </header>
+
+<section class="figma-card">
+  <div class="figma-card__dots"></div>
+
+  <div class="figma-card__icons">
+    <!-- Figma -->
+    <div class="brand-icon brand-icon--figma" aria-label="Figma">
+      <svg viewBox="0 0 38 57" aria-hidden="true">
+        <path d="M19 28.5a9.5 9.5 0 1 1 9.5 9.5H19v-9.5Z" fill="#1ABCFE"/>
+        <path d="M19 0h9.5a9.5 9.5 0 1 1 0 19H19V0Z" fill="#FF7262"/>
+        <path d="M9.5 0A9.5 9.5 0 0 0 9.5 19H19V0H9.5Z" fill="#F24E1E"/>
+        <path d="M9.5 19a9.5 9.5 0 1 0 0 19H19V19H9.5Z" fill="#A259FF"/>
+        <path d="M9.5 38A9.5 9.5 0 1 0 19 47.5V38H9.5Z" fill="#0ACF83"/>
+      </svg>
+    </div>
+
+    <!-- GitContrib -->
+    <div class="brand-icon brand-icon--gitcontrib">
+      <img
+        src="gitcontrib-icon.png"
+        alt="GitContrib"
+      />
+    </div>
+  </div>
+
+  <div class="figma-card__content">
+    <span class="figma-card__eyebrow">
+      FIGMA PLUGIN
+    </span>
+
+    <h2>
+      Design faster with<br />
+      GitContrib in Figma.
+    </h2>
+
+    <p>
+      Bring your GitContrib icons directly into your Figma
+      projects and customize them in seconds.
+    </p>
+
+    <a href="#" class="figma-card__button">
+      Get the Figma plugin
+      <span aria-hidden="true">↗</span>
+    </a>
+  </div>
+</section>
